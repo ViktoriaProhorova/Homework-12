@@ -13,7 +13,7 @@ public class TestBase {
 
     @BeforeMethod
     protected void setup() {
-        Browser browser = Browser.valueOf(System.getProperty("browser"));
+        Browser browser = Browser.valueOf(System.getProperty("browser", "chrome"));
 
         driver = switch (browser) {
             case chrome -> new ChromeDriver();

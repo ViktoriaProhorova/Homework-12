@@ -3,6 +3,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.CartPage;
+import pages.HomePage;
+import pages.ProductPage;
 
 import java.time.Duration;
 
@@ -13,8 +16,6 @@ public class TestCart extends TestBase {
     public void removeFromCartTest() {
         String expectedMessageText = "There are no items in your cart.";
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
-
         HomePage homePage = new HomePage(driver);
         ProductPage productPage = new ProductPage(driver);
         CartPage cartPage = new CartPage(driver);
@@ -23,7 +24,7 @@ public class TestCart extends TestBase {
 
         productPage.clickAddToCartButton();
 
-        wait.until(ExpectedConditions.textToBe(By.cssSelector("span.quantity"), "1"));
+        cartPage.waitingUntilProductIsAddedToCart();
 
         productPage.clickCheckoutButton();
 
@@ -32,7 +33,7 @@ public class TestCart extends TestBase {
 
         cartPage.clickRemoveFromCartButton();
 
-        wait.until(ExpectedConditions.visibilityOf(cartPage.findBackButton()));
+        cartPage.waitingUntilBackButtonAppearsOnThePage();
 
         String expectedMessageAfterProductDeletion = cartPage.getEmptyCartMessage();
         Assert.assertEquals(expectedMessageAfterProductDeletion, expectedMessageText);
@@ -40,8 +41,6 @@ public class TestCart extends TestBase {
 
     @Test
     public void checkDuckPriceIsCorrect() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
         HomePage homePage = new HomePage(driver);
         ProductPage productPage = new ProductPage(driver);
         CartPage cartPage = new CartPage(driver);
@@ -49,9 +48,7 @@ public class TestCart extends TestBase {
         homePage.clickRedDuckFromMostPopularSection();
 
         productPage.clickAddToCartButton();
-
-        wait.until(ExpectedConditions.textToBe(By.cssSelector("span.quantity"), "1"));
-
+        cartPage.waitingUntilProductIsAddedToCart();
         productPage.clickCheckoutButton();
 
         String redDuckCost = cartPage.getProductPrice();
